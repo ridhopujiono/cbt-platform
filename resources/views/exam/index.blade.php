@@ -35,7 +35,9 @@
                 </ul>
 
                 <div class="exam-status">
-                    @if ($userStatus === 'ongoing')
+                    @if($schedule->isFlexible())
+                    <span class="badge badge-info">Bebas</span>
+                    @elseif ($userStatus === 'ongoing')
                         <span class="badge badge-warning">Sedang Berlangsung</span>
                     @elseif ($userStatus === 'finished')
                         <span class="badge badge-success">Selesai</span>
