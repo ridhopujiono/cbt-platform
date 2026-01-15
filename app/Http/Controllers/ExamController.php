@@ -22,6 +22,7 @@ class ExamController extends Controller
 
         // Ambil semua jadwal ujian (bisa difilter per organisasi nanti)
         $schedules = ExamSchedule::with('event')
+            ->where('is_active', true)
             ->orderBy('start_at')
             ->get()
             ->map(function ($schedule) use ($user, $now) {
@@ -77,21 +78,51 @@ class ExamController extends Controller
 
         $schedule = ExamSchedule::findOrFail($request->schedule_id);
 
-        // Pastikan jadwal masih dibuka
-        if ($now->lt($schedule->start_at) || $now->gt($schedule->end_at)) {
+        // ===============================
+        // VALIDASI STATUS JADWAL
+        // ===============================
+        if (! $schedule->is_active) {
             return redirect()
                 ->route('exam.index')
-                ->withErrors('Ujian belum dibuka atau sudah ditutup.');
+                ->withErrors('Ujian tidak aktif.');
         }
 
-        // Cek session ongoing
+        // ===============================
+        // VALIDASI WAKTU (HANYA UNTUK SCHEDULED)
+        // ===============================
+        if ($schedule->isScheduled()) {
+            if ($now->lt($schedule->start_at) || $now->gt($schedule->end_at)) {
+                return redirect()
+                    ->route('exam.index')
+                    ->withErrors('Ujian belum dibuka atau sudah ditutup.');
+            }
+        }
+
+        // ===============================
+        // CEK SESSION YANG MASIH ONGOING
+        // ===============================
         $session = ExamSession::where('user_id', $user->id)
             ->where('schedule_id', $schedule->id)
             ->where('status', 'ongoing')
             ->first();
 
-        // Jika belum ada, buat session baru
         if (! $session) {
+
+            // (Opsional) Batasi 1x attempt
+            $hasFinished = ExamSession::where('user_id', $user->id)
+                ->where('schedule_id', $schedule->id)
+                ->where('status', 'finished')
+                ->exists();
+
+            if ($hasFinished) {
+                return redirect()
+                    ->route('exam.index')
+                    ->withErrors('Anda sudah menyelesaikan ujian ini.');
+            }
+
+            // ===============================
+            // BUAT SESSION BARU
+            // ===============================
             $session = ExamSession::create([
                 'user_id'     => $user->id,
                 'schedule_id' => $schedule->id,
