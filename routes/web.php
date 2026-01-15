@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ExamEventController;
+use App\Http\Controllers\Admin\ExamScheduleQuestionController;
+use App\Http\Controllers\Admin\ExamScheduleController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Auth\LoginController;
@@ -113,6 +116,46 @@ Route::prefix('admin')->group(function () {
 
             Route::delete('/{subject}', [SubjectController::class, 'destroy'])
                 ->name('admin.subjects.destroy');
+        });
+
+        Route::prefix('exam-events')->group(function () {
+            Route::get('/', [ExamEventController::class, 'index'])
+                ->name('admin.exam-events.index');
+
+            Route::get('/create', [ExamEventController::class, 'create'])
+                ->name('admin.exam-events.create');
+
+            Route::post('/', [ExamEventController::class, 'store'])
+                ->name('admin.exam-events.store');
+
+            Route::get('/{event}/edit', [ExamEventController::class, 'edit'])
+                ->name('admin.exam-events.edit');
+
+            Route::put('/{event}', [ExamEventController::class, 'update'])
+                ->name('admin.exam-events.update');
+        });
+
+        Route::prefix('exam-schedules')->group(function () {
+            Route::get('/', [ExamScheduleController::class, 'index'])
+                ->name('admin.exam-schedules.index');
+
+            Route::get('/create', [ExamScheduleController::class, 'create'])
+                ->name('admin.exam-schedules.create');
+
+            Route::post('/', [ExamScheduleController::class, 'store'])
+                ->name('admin.exam-schedules.store');
+
+            Route::get('/{schedule}/edit', [ExamScheduleController::class, 'edit'])
+                ->name('admin.exam-schedules.edit');
+
+            Route::put('/{schedule}', [ExamScheduleController::class, 'update'])
+                ->name('admin.exam-schedules.update');
+
+            Route::get('/{schedule}/questions', [ExamScheduleQuestionController::class, 'edit'])
+                ->name('admin.exam-schedules.questions');
+
+            Route::post('/{schedule}/questions', [ExamScheduleQuestionController::class, 'update'])
+                ->name('admin.exam-schedules.questions.update');
         });
     });
 });
