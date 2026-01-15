@@ -15,6 +15,10 @@ class ExamSession extends Model
         'end_time',
         'status',
         'last_heartbeat',
+        'score',
+        'correct_count',
+        'raw_score',
+        'final_score'
     ];
 
     protected $casts = [
