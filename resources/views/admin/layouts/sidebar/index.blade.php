@@ -32,7 +32,10 @@
                             <a href="{{ route('admin.subjects.index') }}">Materi</a>
                         </li>
                         <li>
-                            <a href="#">Jadwal Ujian</a>
+                            <a href="{{ route('admin.exam-events.index') }}">Event Ujian</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.exam-schedules.index') }}">Jadwal Ujian</a>
                         </li>
                         <li>
                             <a href="#">Hasil Ujian</a>
