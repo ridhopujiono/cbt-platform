@@ -10,9 +10,11 @@ class ExamSchedule extends Model
 {
     protected $fillable = [
         'event_id',
+        'type',
         'start_at',
         'end_at',
         'duration_minutes',
+        'is_active',
     ];
 
     protected $casts = [
@@ -34,5 +36,15 @@ class ExamSchedule extends Model
     {
         return $this->hasMany(ExamQuestion::class, 'schedule_id')
             ->orderBy('order_number');
+    }
+
+    public function isFlexible(): bool
+    {
+        return $this->type === 'flexible';
+    }
+
+    public function isScheduled(): bool
+    {
+        return $this->type === 'scheduled';
     }
 }
