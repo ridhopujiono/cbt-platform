@@ -28,13 +28,22 @@ class ExamScheduleController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'type' => 'required|in:scheduled,flexible',
             'event_id' => 'required|exists:exam_events,id',
             'start_at' => 'required|date',
             'end_at' => 'required|date|after:start_at',
             'duration_minutes' => 'required|integer|min:1',
         ]);
 
-        ExamSchedule::create($data);
+        ExamSchedule::create([
+            'event_id' => $data['event_id'],
+            'type' => $data['type'],
+            'start_at' => $data['type'] === 'scheduled' ? $data['start_at'] : null,
+            'end_at' => $data['type'] === 'scheduled' ? $data['end_at'] : null,
+            'duration_minutes' => $data['duration_minutes'],
+            'is_active' => true,
+        ]);
+
 
         return redirect()
             ->route('admin.exam-schedules.index')
@@ -51,13 +60,21 @@ class ExamScheduleController extends Controller
     public function update(Request $request, ExamSchedule $schedule)
     {
         $data = $request->validate([
+            'type' => 'required|in:scheduled,flexible',
             'event_id' => 'required|exists:exam_events,id',
             'start_at' => 'required|date',
             'end_at' => 'required|date|after:start_at',
             'duration_minutes' => 'required|integer|min:1',
         ]);
 
-        $schedule->update($data);
+        $schedule->update([
+            'event_id' => $data['event_id'],
+            'type' => $data['type'],
+            'start_at' => $data['type'] === 'scheduled' ? $data['start_at'] : null,
+            'end_at' => $data['type'] === 'scheduled' ? $data['end_at'] : null,
+            'duration_minutes' => $data['duration_minutes'],
+            'is_active' => true,
+        ]);
 
         return redirect()
             ->route('admin.exam-schedules.index')
