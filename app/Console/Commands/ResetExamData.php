@@ -25,6 +25,7 @@ class ResetExamData extends Command
         DB::table('exam_logs')->truncate();
         DB::table('exam_responses')->truncate();
         DB::table('exam_sessions')->truncate();
+        DB::table('exam_questions')->truncate();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
