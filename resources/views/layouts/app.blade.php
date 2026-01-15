@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>@yield('title', 'Exam')</title>
-        <link rel="stylesheet" href="{{ asset('css/exam.css') }}">
-    </head>
-    <body>
-        <main>
-            @yield('content')
-        </main>
-        <script src="{{ asset('js/exam.js') }}"></script>
-    </body>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @isset($session)
+        <meta name="autosave-url" content="{{ route('exam.autosave', $session->id) }}">
+    @endisset
+
+    <title>@yield('title', 'Login')</title>
+
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+
+<body>
+
+    <main class="app-container">
+        @yield('content')
+    </main>
+
+</body>
+
 </html>
