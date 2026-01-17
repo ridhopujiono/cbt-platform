@@ -96,7 +96,6 @@ Route::prefix('admin')->group(function () {
                     ->where('status', 'published')
                     ->get();
             })->middleware('admin');
-
         });
 
         Route::prefix('subjects')->group(function () {
@@ -159,9 +158,19 @@ Route::prefix('admin')->group(function () {
                 ->name('admin.exam-schedules.questions.update');
         });
 
-        Route::get('/exam-results', 
+        Route::get(
+            '/exam-results',
             [ExamResultController::class, 'index']
         )->name('admin.exam-results.index');
 
+        Route::get(
+            '/exam-results/session/{session}',
+            [ExamResultController::class, 'show']
+        )->name('admin.exam-results.show');
+
+        Route::get(
+            '/exam-results/export/{schedule}',
+            [App\Http\Controllers\Admin\ExamResultExportController::class, 'export']
+        )->name('admin.exam-results.export');
     });
 });
