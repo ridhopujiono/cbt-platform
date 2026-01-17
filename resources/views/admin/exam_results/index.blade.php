@@ -56,8 +56,13 @@
 {{-- HASIL --}}
 @if(request('schedule_id'))
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h5>Daftar Hasil Ujian</h5>
+
+        <a href="{{ route('admin.exam-results.export', request('schedule_id')) }}"
+           class="btn btn-success btn-sm">
+            Unduh Excel
+        </a>
     </div>
 
     <div class="card-body">
@@ -71,6 +76,7 @@
                     <th>Skor Bobot</th>
                     <th>Nilai Akhir</th>
                     <th>Waktu Selesai</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,6 +100,12 @@
                         @endif
                     </td>
                     <td>{{ $s->end_time ?? '-' }}</td>
+                    <td>
+                        <a href="{{ route('admin.exam-results.show', $s->id) }}"
+                        class="btn btn-sm btn-outline-primary">
+                            Detail
+                        </a>
+                    </td>
                 </tr>
                 @empty
                 <tr>
