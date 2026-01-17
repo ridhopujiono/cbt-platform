@@ -66,12 +66,16 @@
 
 
             <!-- QUESTION -->
-            <div class="question-box">
-                <h2 class="question-text">
+            <div class="question-box math-preview">
+                <span class="question-number-inline">
                     {{ $activeExamQuestion->order_number }}.
-                    {{ $activeExamQuestion->question->content }}
-                </h2>
+                </span>
+
+                <span class="question-content-inline">
+                    {!! $activeExamQuestion->question->content !!}
+                </span>
             </div>
+
 
 
             <!-- OPTIONS -->
@@ -86,7 +90,7 @@
                         {{ $response && $response->option_id == $option->id ? 'checked' : '' }}>
 
                     <span class="option-label">{{ $option->label }}</span>
-                    <span class="option-text">{{ $option->content }}</span>
+                    <span class="option-text">{!! $option->content !!}</span>
                 </label>
                 @endforeach
             </div>
@@ -145,3 +149,13 @@
 
 <script src="{{ asset('js/exam.js') }}"></script>
 @endsection
+
+@push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    });
+    </script>
+@endpush
