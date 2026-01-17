@@ -32,17 +32,30 @@ class ExamSubmitController extends Controller
 
             $schedule = $session->schedule;
 
-            $endTime = $session->start_time
+            // ===============================
+            // HITUNG BATAS AKHIR YANG VALID
+            // ===============================
+            $sessionEndTime = $session->start_time
+                ->copy()
                 ->addMinutes($schedule->duration_minutes);
 
-            // ===== LOCK SESSION =====
+            if ($schedule->isScheduled() && $schedule->end_at) {
+                $sessionEndTime = min($sessionEndTime, $schedule->end_at);
+            }
+
+            // ===============================
+            // LOCK SESSION
+            // ===============================
             $session->update([
                 'status'   => 'finished',
-                'end_time' => now()->greaterThan($endTime)
-                    ? $endTime
+                'end_time' => now()->greaterThan($sessionEndTime)
+                    ? $sessionEndTime
                     : now(),
             ]);
 
+            // ===============================
+            // HITUNG NILAI
+            // ===============================
             $correctCount = 0;
             $rawScore     = 0;
 
@@ -60,18 +73,24 @@ class ExamSubmitController extends Controller
                 }
             }
 
-            // ===== TOTAL BOBOT SEMUA SOAL (WAJIB) =====
-            $totalWeight = $session->schedule
-                ->examQuestions()
+            // ===============================
+            // TOTAL BOBOT SOAL
+            // ===============================
+            $totalWeight = $schedule->examQuestions()
                 ->with('question')
                 ->get()
-                ->sum(fn($eq) => $eq->question->weight);
+                ->sum(fn ($eq) => $eq->question->weight);
 
-            // ===== NILAI AKHIR =====
+            // ===============================
+            // NILAI AKHIR (0–100)
+            // ===============================
             $finalScore = $totalWeight > 0
                 ? round(($rawScore / $totalWeight) * 100, 2)
                 : 0;
 
+            // ===============================
+            // SIMPAN HASIL
+            // ===============================
             $session->update([
                 'correct_count' => $correctCount,
                 'raw_score'     => $rawScore,
@@ -80,10 +99,9 @@ class ExamSubmitController extends Controller
         });
 
         return redirect()
-            ->route('exam.result', $session->id)
+            ->route('exam.index')
             ->with('success', 'Ujian berhasil diselesaikan.');
     }
-
 
     private function authorizeSession(ExamSession $session)
     {
