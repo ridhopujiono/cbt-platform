@@ -6,6 +6,8 @@
 <div class="pcoded-main-container">
     <div class="pcoded-content">
 
+        
+
         @include('admin.layouts.breadcrumb.index')
 
         <div class="card">
@@ -14,6 +16,13 @@
             </div>
 
             <div class="card-body">
+
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">
+                        {{ $error }}
+                    </div>
+                @endforeach
+                
                 <form method="POST"
                     action="{{ route('admin.exam-schedules.update', $schedule->id) }}">
                     @csrf
@@ -71,7 +80,7 @@
                             required>
                     </div>
 
-                    <button class="btn btn-primary">Update</button>
+                    <button class="btn btn-primary" type="submit">Update</button>
                     <a href="{{ route('admin.exam-schedules.index') }}"
                         class="btn btn-secondary">Batal</a>
                 </form>
@@ -81,3 +90,37 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    const typeSelect = document.getElementById('exam-type');
+    const timeBox = document.getElementById('schedule-time');
+    
+    // Ambil elemen input start_at dan end_at
+    const startInput = document.querySelector('input[name="start_at"]');
+    const endInput = document.querySelector('input[name="end_at"]');
+
+    function toggleTime() {
+        if (typeSelect.value === 'flexible') {
+            // Sembunyikan dan HAPUS wajib isi
+            timeBox.style.display = 'none';
+            startInput.required = false;
+            endInput.required = false;
+            
+            // Opsional: Kosongkan nilai jika pindah ke flexible agar tidak kirim sampah data
+            startInput.value = '';
+            endInput.value = '';
+        } else {
+            // Tampilkan dan SET wajib isi
+            timeBox.style.display = 'block';
+            startInput.required = true;
+            endInput.required = true;
+        }
+    }
+
+    typeSelect.addEventListener('change', toggleTime);
+    
+    // Jalankan saat halaman dimuat
+    toggleTime();
+</script>
+@endpush
