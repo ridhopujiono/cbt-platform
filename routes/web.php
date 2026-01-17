@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExamEventController;
+use App\Http\Controllers\Admin\ExamResultController;
 use App\Http\Controllers\Admin\ExamScheduleQuestionController;
 use App\Http\Controllers\Admin\ExamScheduleController;
 use App\Http\Controllers\Admin\QuestionController;
@@ -157,5 +158,10 @@ Route::prefix('admin')->group(function () {
             Route::post('/{schedule}/questions', [ExamScheduleQuestionController::class, 'update'])
                 ->name('admin.exam-schedules.questions.update');
         });
+
+        Route::get('/exam-results', 
+            [ExamResultController::class, 'index']
+        )->name('admin.exam-results.index');
+
     });
 });
