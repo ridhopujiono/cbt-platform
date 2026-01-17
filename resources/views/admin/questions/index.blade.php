@@ -171,8 +171,10 @@ document.getElementById('preview-subject').addEventListener('change', async func
     data.forEach((q, i) => {
         let html = `
             <div class="mb-4">
-                <strong>${i+1}. </strong>
-                <div class="math-preview">${q.content}</div>
+                <div class="d-flex">
+                    <strong>${i+1}. </strong>
+                    <div class="math-preview">${q.content}</div>
+                </div>
                 <ol type="A">
         `;
 
