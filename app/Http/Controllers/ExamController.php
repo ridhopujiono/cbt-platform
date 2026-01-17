@@ -45,6 +45,15 @@ class ExamController extends Controller
                     $userStatus = 'not_started';
                 }
 
+                if ($schedule->type === 'flexible') {
+                    // Untuk ujian fleksibel, abaikan status waktu
+                    $timeStatus = 'open';
+                    return [
+                        'schedule'   => $schedule,
+                        'userStatus' => $userStatus,
+                        'timeStatus' => $timeStatus,
+                    ];
+                }
                 // Status jadwal berdasarkan waktu
                 if ($now->lt($schedule->start_at)) {
                     $timeStatus = 'not_open';
@@ -145,6 +154,10 @@ class ExamController extends Controller
 
         $schedule = $session->schedule;
 
+        if ($schedule->examQuestions->isEmpty()) {
+            abort(403, 'Soal ujian belum tersedia.');
+        }
+
         // === TIMER LOGIC (SERVER SIDE) ===
         $endTime = $session->start_time
             ->addMinutes($schedule->duration_minutes);
@@ -167,6 +180,7 @@ class ExamController extends Controller
                 ->with(['question.passage', 'question.options'])
                 ->get()
         );
+
 
         $activeExamQuestion = $examQuestions
             ->firstWhere('order_number', $activeOrder);
