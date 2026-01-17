@@ -38,7 +38,7 @@
                             <a href="{{ route('admin.exam-schedules.index') }}">Jadwal Ujian</a>
                         </li>
                         <li>
-                            <a href="#">Hasil Ujian</a>
+                            <a href="{{ route('admin.exam-results.index') }}">Hasil Ujian</a>
                         </li>
                     </ul>
                 </li>
