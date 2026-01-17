@@ -62,8 +62,8 @@ class ExamScheduleController extends Controller
         $data = $request->validate([
             'type' => 'required|in:scheduled,flexible',
             'event_id' => 'required|exists:exam_events,id',
-            'start_at' => 'required|date',
-            'end_at' => 'required|date|after:start_at',
+            'start_at' => 'nullable',
+            'end_at' => 'nullable|after:start_at',
             'duration_minutes' => 'required|integer|min:1',
         ]);
 
