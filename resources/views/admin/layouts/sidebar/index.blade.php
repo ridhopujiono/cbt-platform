@@ -4,16 +4,31 @@
 
             <ul class="nav pcoded-inner-navbar">
 
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Navigation</label>
-                </li>
-
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">
                         <span class="pcoded-micon">
                             <i class="feather icon-home"></i>
                         </span>
                         <span class="pcoded-mtext">Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.organizations.index') }}" class="nav-link">
+                        <span class="pcoded-micon">
+                            <i class="feather icon-briefcase"></i>
+                        </span>
+                        <span class="pcoded-mtext">Organisasi</span>
+                    </a>
+                </li>
+
+                <!-- Users -->
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.index') }}" class="nav-link">
+                        <span class="pcoded-micon">
+                            <i class="feather icon-users"></i>
+                        </span>
+                        <span class="pcoded-mtext">Users</span>
                     </a>
                 </li>
 

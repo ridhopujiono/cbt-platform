@@ -6,8 +6,10 @@ use App\Http\Controllers\Admin\ExamEventController;
 use App\Http\Controllers\Admin\ExamResultController;
 use App\Http\Controllers\Admin\ExamScheduleQuestionController;
 use App\Http\Controllers\Admin\ExamScheduleController;
+use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamSubmitController;
@@ -172,5 +174,13 @@ Route::prefix('admin')->group(function () {
             '/exam-results/export/{schedule}',
             [App\Http\Controllers\Admin\ExamResultExportController::class, 'export']
         )->name('admin.exam-results.export');
+
+        Route::resource('organizations', OrganizationController::class)
+            ->except(['show'])
+            ->names('admin.organizations');
+
+        Route::resource('users', UserController::class)
+        ->names('admin.users');
+
     });
 });
