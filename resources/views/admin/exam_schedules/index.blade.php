@@ -45,11 +45,15 @@
                             <td>{{ $s->duration_minutes }} menit</td>
                             <td>
                                 @php
-                                    if (now()->lt($s->start_at)) $status = 'Belum Dibuka';
-                                    elseif (now()->gt($s->end_at)) $status = 'Selesai';
-                                    else $status = 'Aktif';
+                                    if ($s->type == 'flexible') {
+                                        $status = 'Fleksibel';
+                                    } else {
+                                        if (now()->lt($s->start_at)) $status = 'Belum Dibuka';
+                                        elseif (now()->gt($s->end_at)) $status = 'Selesai';
+                                        else $status = 'Aktif';
+                                    }
                                 @endphp
-                                <span class="badge badge-info">{{ $status }}</span>
+                                <span class="badge badge-{{ $s->type == 'flexible' ? 'warning' : 'info' }}">{{ $status }}</span>
                             </td>
                             <td>
                                 <a href="{{ route('admin.exam-schedules.edit', $s->id) }}"
