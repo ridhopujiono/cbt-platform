@@ -39,4 +39,19 @@ class ExamResultController extends Controller
             'sessions'
         ));
     }
+
+    public function show(ExamSession $session)
+    {
+        $session->load([
+            'user',
+            'schedule.event',
+            'schedule.examQuestions.question.options',
+            'responses'
+        ]);
+
+        return view(
+            'admin.exam_results.show',
+            compact('session')
+        );
+    }
 }
