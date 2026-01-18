@@ -10,6 +10,8 @@ services:
       - mysql
     networks:
       - laravel
+    ports:
+      - "9001:8000"
 
   nginx:
     image: nginx:alpine
