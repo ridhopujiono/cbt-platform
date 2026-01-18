@@ -1,0 +1,5 @@
+DB::connection()->getPdo();
+php artisan migrate
+exit
+DB::select('DESCRIBE users');
+exit
