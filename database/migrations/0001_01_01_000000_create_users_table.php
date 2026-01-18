@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('username');
-            $table->foreignId('org_id')->constrained('organizations');
+            $table->foreignId('org_id')->nullable()->constrained('organizations');
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
